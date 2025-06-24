@@ -1,11 +1,17 @@
 from decimal import Decimal,InvalidOperation
 from datetime import datetime
+import csv
+import io
+
 class expense:
     def __init__(self):
         self.expenses = list()
         self.budget = Decimal(0)
+
     def view(self):
-        pass
+        for item in self.expenses:
+            print(item['date'],item['amount'])
+
     def add(self):
         expenseDate = self._getDate()
         expenseCategory = input("Enter category of the expense: ")
@@ -37,9 +43,8 @@ class expense:
 
         #self.expenses(map(lambda T: T["amount"]))
 
-    def saveExpenses(self):
-        for item in self.expenses:
-            print(item['date'],item['amount'])
+    def saveExpenses(self):    
+        self._saveDataToDisk(self.expenses)
         print("saved \n")
        
     
@@ -58,7 +63,13 @@ class expense:
                 return Decimal(value)
             except InvalidOperation:
                 print("Input amount value")  
-             
+
+    def _saveDataToDisk(self, data):
+        with open("expenses.csv","w",newline="") as file:
+            fieldNames = ["date","category","amount","description"]
+            writer = csv.DictWriter(file, fieldnames= fieldNames)
+            writer.writeheader()
+            writer.writerows(data)       
         
 def main():
     e = expense()
