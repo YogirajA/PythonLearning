@@ -11,8 +11,18 @@ class expense:
         self.budget = Decimal(0)
 
     def view(self):
-        for item in self.expenses:
-            print(item['date'],item['amount'])
+        if(self.expenses):
+            print("\ndate, category, amount, description")
+
+        for index, item in enumerate(self.expenses):
+            if(self._stringIsNullOfEmpty(item['date']) or
+               self._stringIsNullOfEmpty(item['category']) or
+               self._stringIsNullOfEmpty(item['amount']) or
+               self._stringIsNullOfEmpty(item['description'])):
+               print(f"Skipping invalid values found at row: {index}")
+               continue     
+            else:
+                print(f"{item['date']}, {item['category']}, {item['amount']}, {item['description']}]")
 
     def add(self):
         expenseDate = self._getDate()
@@ -83,7 +93,9 @@ class expense:
         else:
             print(f"file {fullfilePath} doesn't exist.")
             return list()
-            
+    
+    def _stringIsNullOfEmpty(self, data):
+        return data is None or str(data).strip() == ""
         
 def main():
     e = expense()
