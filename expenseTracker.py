@@ -23,7 +23,7 @@ class expenseTracker:
                print(f"Skipping invalid values found at row: {index}")
                continue
             else:
-                print(f"{item['date']}, {item['category']}, {item['amount']}, {item['description']}]")
+                print(f"{item['date']}, {item['category']}, {item['amount']}, {item['description']}")
 
     def add(self):
         expenseDate = self._getDate()
