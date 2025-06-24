@@ -1,11 +1,13 @@
 from decimal import Decimal,InvalidOperation
 from datetime import datetime
 import csv
-import io
+from pathlib import Path
 
 class expense:
-    def __init__(self):
-        self.expenses = list()
+    def __init__(self):   
+        filePath = "expenses.csv"
+        self.expenses = self._readDataFromDisk(filePath)
+        self.filePath = filePath
         self.budget = Decimal(0)
 
     def view(self):
@@ -44,7 +46,7 @@ class expense:
         #self.expenses(map(lambda T: T["amount"]))
 
     def saveExpenses(self):    
-        self._saveDataToDisk(self.expenses)
+        self._saveDataToDisk(self.filePath, self.expenses)
         print("saved \n")
        
     
@@ -64,12 +66,24 @@ class expense:
             except InvalidOperation:
                 print("Input amount value")  
 
-    def _saveDataToDisk(self, data):
-        with open("expenses.csv","w",newline="") as file:
+    def _saveDataToDisk(self, fullfilePath, data):
+        with open(fullfilePath,"w",newline="") as file:
             fieldNames = ["date","category","amount","description"]
             writer = csv.DictWriter(file, fieldnames= fieldNames)
             writer.writeheader()
-            writer.writerows(data)       
+            writer.writerows(data)    
+
+    def _readDataFromDisk(self, fullfilePath):
+        filePath = Path(fullfilePath)
+        if(filePath.exists()):
+            print(f"reading {fullfilePath}")
+            with open(filePath,"r",newline="") as file:              
+                reader = csv.DictReader(file)
+                return list(reader)
+        else:
+            print(f"file {fullfilePath} doesn't exist.")
+            return list()
+            
         
 def main():
     e = expense()
