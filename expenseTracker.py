@@ -44,7 +44,7 @@ class expenseTracker:
     def trackBudget(self):
         total = Decimal(0)
         for item in self.expenses:
-           total = total + item["amount"]
+           total = total + Decimal(item["amount"])
 
         print(total)
 
